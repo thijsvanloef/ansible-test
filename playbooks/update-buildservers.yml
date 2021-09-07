@@ -10,8 +10,8 @@
         availability: drain
 
     - name: Wait for Container Migration
-      wait_for:
-        sleep: 60
+      pause:
+        minutes: 20
 
     - name: Update apt repo and cache on server
       apt: update_cache=yes force_apt_get=yes cache_valid_time=3600

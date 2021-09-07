@@ -1,0 +1,35 @@
+---
+- hosts: all
+  become: true
+  become_user: root
+  any_errors_fatal: true
+  tasks:
+   - name: Shutting down Jenkins
+     when: inventory_hostname in groups['main']
+     shell: 
+      cmd: docker service rm CI_jenkins
+
+   - name: Wait for Shutdown
+     when: inventory_hostname in groups['main']
+     pause:
+      seconds: 10
+  
+   - name: Remove old image
+     when: inventory_hostname in groups['all']
+     docker_image:
+       state: absent
+       name: hello-world
+
+   - name: Pull new image
+     when: inventory_hostname in groups['all']
+     docker_image:
+       name: hello-world
+       source: pull
+
+   - name: Deploy stack from a compose file
+     when: inventory_hostname in groups['main']
+     docker_stack:
+       state: present
+       name: CI
+       compose:
+         - /path/to/docker-compose.yml
