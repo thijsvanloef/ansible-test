@@ -6,7 +6,7 @@
   tasks:
     - name: Drain the node
       docker_node:
-        hostname: "{{ansible_hostname}}"
+        hostname: "{{ ansible_hostname }}"
         availability: drain
 
     - name: Wait for Container Migration
@@ -32,8 +32,8 @@
         post_reboot_delay: 30
         test_command: uptime
       when: reboot_required_file.stat.exists
-    
+
     - name: Activate the node
       docker_node:
-        hostname: "{{ansible_hostname}}"
+        hostname: "{{ ansible_hostname }}"
         availability: active

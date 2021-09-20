@@ -6,14 +6,15 @@
   tasks:
    - name: Shutting down Jenkins
      when: inventory_hostname in groups['main']
-     shell: 
-      cmd: docker service rm CI_jenkins
+     docker_swarm_service:
+      name: CI_jenkins
+      state: absent
 
    - name: Wait for Shutdown
      when: inventory_hostname in groups['main']
      pause:
       seconds: 10
-  
+
    - name: Remove old image
      when: inventory_hostname in groups['all']
      docker_image:
